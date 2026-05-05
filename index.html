@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="logo">
+        <img src="img/Lambang-UNS-0.jpeg" alt="lambang" class="lambang">
+        <img src="img/State_University_of_Surabaya_log.jpeg" alt="lambang" class="lambang">
+        <img src="img/LOGO KOMADIKSI SMART.jpeg" alt="lambang" class="lambang">
+        <img src="img/1771292325241_9727031.webp" alt="lambang" class="lambang">
+    </div>
     <div class="judul">
         <h2>Pendaftaran Ekstra Kursi Studi Banding</h2>
         <p>Komadiksi Smart UNS x Formadiksi UNESA</p>
@@ -43,8 +49,8 @@
         <table>
             <thead>
                 <tr>
-                    <th>Bidang</th>
                     <th>Nama</th>
+                    <th>Bidang</th>
                 </tr>
             </thead>
             <tbody id="isi-tabel"></tbody>
@@ -76,7 +82,7 @@
                     }
 
                     data.slice(0, 4).forEach(item => {
-                        isiTabel.innerHTML += `<tr class="winner-row"><td>${item.bidang}</td><td>${item.nama}</td></tr>`;
+                        isiTabel.innerHTML += `<tr class="winner-row"><td>${item.nama}</td><td>${item.bidang}</td></tr>`;
                     });
                 }).catch(e => console.error(e));
         }

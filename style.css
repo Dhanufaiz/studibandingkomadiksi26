@@ -20,6 +20,17 @@ body {
     margin: 0;
 }
 
+.lambang {
+    width: 30px;
+    border-radius: 50%;
+}
+
+.logo {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 50px;
+}
+
 .judul h2 {
     font-family: 'League Spartan', serif;
     text-align: center;
