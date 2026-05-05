@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Banding Komadiksi x Formadiksi</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="judul">
+        <h2>Pendaftaran Ekstra Kursi Studi Banding</h2>
+        <p>Komadiksi Smart UNS x Formadiksi UNESA</p>
+    </div>
+    <div>
+        <p>perebutan 4 orang untuk kursi yang kosong untuk studi banding ke UNESA</p>
+    </div>
+    <div class="glass-card">
+        <form id="war-form">
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" name="nama" placeholder="Nama Lengkap" required>
+            </div>
+            <div class="form-group">
+                <label>Bidang</label>
+                <select name="bidang" required>
+                    <option value="">-- Pilih Bidang --</option>
+                    <option value="Sekretaris Umum">Sekretaris Umum</option>
+                    <option value="Bendahara Umum">Bendahara Umum</option>
+                    <option value="Pengabdian Masyarakat">Pengabdian Masyarakat</option>
+                    <option value="Minat dan Bakat">Minat dan Bakat</option>
+                    <option value="PSDM">PSDM</option>
+                    <option value="Hubungan Internal">Hubungan Internal</option>
+                    <option value="Media dan Informasi">Media dan Informasi</option>
+                </select>
+            </div>
+            <button type="submit" id="send-btn">KIRIM PENDAFTARAN</button>
+            <div id="kuota-info" style="text-align:center; margin-top:10px;">Mengecek kuota...</div>
+        </form>
+    </div>
+
+    <div class="glass-card">
+        <h3>4 Tercepat</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Bidang</th>
+                    <th>Nama</th>
+                </tr>
+            </thead>
+            <tbody id="isi-tabel"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyfWYTS_2_m392ofvyN9Nt-0_kXVq2GANFKVh7uLgAIiwRrTaD5FsIDYnypKU2Q-JNzeQ/exec';
+        const form = document.getElementById('war-form');
+        const btnSubmit = document.getElementById('send-btn');
+        const kuotaInfo = document.getElementById('kuota-info');
+        const isiTabel = document.getElementById('isi-tabel');
+
+        function refreshData() {
+            fetch(scriptURL)
+                .then(res => res.json())
+                .then(data => {
+                    isiTabel.innerHTML = "";
+                    data.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    
+                    const sisa = 4 - data.length;
+                    if (sisa <= 0) {
+                        btnSubmit.disabled = true;
+                        btnSubmit.innerText = "KUOTA PENUH";
+                        kuotaInfo.innerText = "Pendaftaran Ditutup";
+                    } else {
+                        btnSubmit.disabled = false;
+                        kuotaInfo.innerText = `Tersisa ${sisa} Slot`;
+                    }
+
+                    data.slice(0, 4).forEach(item => {
+                        isiTabel.innerHTML += `<tr class="winner-row"><td>${item.bidang}</td><td>${item.nama}</td></tr>`;
+                    });
+                }).catch(e => console.error(e));
+        }
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            btnSubmit.disabled = true;
+            btnSubmit.innerText = "Mengirim...";
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(res => res.json())
+                .then(res => {
+                    alert(res.result === 'success' ? "Berhasil!" : "Gagal: " + res.error);
+                    form.reset();
+                    refreshData();
+                }).catch(() => {
+                    alert("Error Koneksi");
+                    btnSubmit.disabled = false;
+                });
+        });
+
+        window.onload = refreshData;
+        setInterval(refreshData, 5000);
+    </script>
+</body>
+</html>
